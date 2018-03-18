@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<!-- saved from url=(0016)http://runjs.cn/ -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	
+	<meta name="description" content="RunJS,在线编写、展示html、js、css代码，拥有实时预览、分享、Fork、代码高亮、自动完成等多项特性，提供文件上传、多种登录方式。">
+	<meta name="keywords" content="RunJS runjs JavaScript CSS HTML 在线运行 展示 效果">
+	<title>RunJS - 在线编辑、展示、分享、交流你的 JavaScript 代码</title>
+		<link rel="stylesheet" type="text/css" href="./RunJS - 在线编辑、展示、分享、交流你的 JavaScript 代码_files/index.css">
+		<script src="./RunJS - 在线编辑、展示、分享、交流你的 JavaScript 代码_files/jquery-1.8.2.min.js.下载" type="text/javascript"></script>
+		<script type="text/javascript">
+			var cur_page = 1;
+			RURL=location.href;
+    		$(document).ready(function() {
+            	$(".getIn .dl").mouseenter(function() {
+            		
+            		$(this).find(".gradientBg").stop().animate({
+            			opacity : 0.4
+            		}, "slow");
+            	});
+            
+            	$(".getIn .dl").mouseleave(function() {
+            		
+            		$(this).find(".gradientBg").stop().animate({
+            			opacity : 1
+            		}, "normal");
+            	});
+				
+				$(".select").mouseover(function() {
+        			$(this).find("ul").show();
+        		}).mouseout(function() {
+        			$(this).find("ul").hide();
+        		});
+        
+        		$(".select li").click(function() {
+        			$(this).parent().hide();
+        		});
+				$(".msg_ul li a").click(function(){
+					jQuery.post("/action/msg/readMsg","id="+$(this).parent().attr("id"));
+				});
+				//公告无限滚动
+    			var notice_ul = $(".notice ul");
+				var notice_lis = notice_ul.find("li");
+    			var count = notice_lis.length;
+				var width = 0;
+				jQuery.each(notice_lis,function(idx,li){
+					width += $(li).width();
+				});
+    			notice_ul.css({width:width+20*count});
+				var margin_left = 0;
+				var direction = "left";
+				var stop = false;
+				setInterval(function(){
+					if(stop)
+						return;
+					notice_ul.css("margin-left",margin_left);
+					var li = $(".notice ul li:eq(0)");
+					if(margin_left + li.width()+20 <= 0){
+						var li2 = li.clone();
+						$(".notice ul").append(li2);
+						li.remove();
+						margin_left = 0;
+						notice_ul.css("margin-left",margin_left);
+					}
+					margin_left=margin_left-1;
+				},20);
+				$(".notice").mouseover(function(){
+					stop = true;
+				}).mouseout(function(){
+					stop = false;
+				});
+            });
+
+			function login(type){
+				var url = "http://runjs.cn/action/openid/before_login?op=" + type;
+				openwindow(url, 'loginPage', 800, 600);
+			}
+			function logout(uid){
+            	jQuery.post("/action/ajax/logout",'uid='+uid, function(msg) {
+            		location.href="/";
+            	});
+            }
+			
+			function openwindow(url, name, iWidth, iHeight) {
+			var url; // 转向网页的地址;
+			var name; // 网页名称，可为空;
+			var iWidth; // 弹出窗口的宽度;
+			var iHeight; // 弹出窗口的高度;
+			var iTop = (window.screen.availHeight - 30 - iHeight) / 2; // 获得窗口的垂直位置;
+			var iLeft = (window.screen.availWidth - 10 - iWidth) / 2; // 获得窗口的水平位置;
+			window.open(url,name,
+				'height='
+						+ iHeight
+						+ ',,innerHeight='
+						+ iHeight
+						+ ',width='
+						+ iWidth
+						+ ',innerWidth='
+						+ iWidth
+						+ ',top='
+						+ iTop
+						+ ',left='
+						+ iLeft
+						+ ',toolbar=no,menubar=no,scrollbars=auto,resizeable=no,location=no,status=no');
+			}
+			function more_dy(){
+				$("#get_more").html("加载中...");
+				jQuery.get("/widget/_more_dy/"+(cur_page+1),function(m){
+					$("#get_more").html("点击加载更多");
+					$(".userOperate ul").append(m);
+					cur_page++;
+				});
+			}
+		</script>
+	</head>
+	<body cz-shortcut-listen="true">
+	<!--     头部header开始    -->
+     <div class="header">
+		<a href="http://runjs.cn/">
+        <div class="logo">
+            <h3>RunJS</h3>
+        </div>
+		</a>
+        <div class="headerMenu">
+			<div class="menuItem btnGroup login">
+								<div class="select" id="login">
+				<div class="title">登录<div class="arrow_bottom"></div></div>
+                <ul>
+                    <li><a href="javascript:login(&#39;oschina&#39;)">开源中国</a></li>
+					<li><a href="javascript:login(&#39;qq&#39;)">腾讯QQ</a></li>
+					<li><a href="javascript:login(&#39;weibo&#39;)">新浪微博</a></li>
+					<li><a href="javascript:login(&#39;google&#39;)">Google</a></li>
+					<li><a href="javascript:login(&#39;github&#39;)">Github</a></li>
+					<li><a href="javascript:login(&#39;hotmail&#39;)">Hotmail</a></li>
+					<li><a href="javascript:login(&#39;yahoo&#39;)">Yahoo</a></li>
+				</ul>
+    			</div>
+							</div>
+		</div>
+    </div>
+	<div class="index_content">
+      <h2> RunJS - 在线编辑、展示、分享、交流你的  JavaScript 代码</h2>
+      <div class="getIn clearfix">
+		<a href="http://runjs.cn/square">
+        <dl class="dl">
+          <dt>广场</dt>
+          <dd class="gradientBg"></dd>
+          <dd class="description">展示最新最热的优质代码</dd>
+          <dd class="img"><img src="./RunJS - 在线编辑、展示、分享、交流你的 JavaScript 代码_files/square.jpg" width="300" height="150" alt="展示最新最热的优质代码">
+          </dd>        
+        </dl>
+        </a>
+		<a href="http://runjs.cn/code">
+        <dl class="dl">
+          <dt>编辑器</dt>
+          <dd class="gradientBg"></dd>
+          <dd class="description">在线编辑、实时预览你的  JavaScript 代码</dd>
+          <dd class="img"><img src="./RunJS - 在线编辑、展示、分享、交流你的 JavaScript 代码_files/editor.jpg" width="300" height="150" alt="在线编辑、实时预览你的 JavaScript 代码">
+          </dd>
+        </dl>
+        </a>
+		<a href="http://runjs.cn/plugin">
+        <dl class="dl">
+          <dt>个性插件</dt>
+          <dd class="ribbonWrapper">
+            <div class="ribbon">NEW</div>
+          </dd>
+          <dd class="gradientBg"></dd>
+          <dd class="description">自由扩展、自我增强、打造属于自己的编辑器</dd>        
+          <dd class="img"><img src="./RunJS - 在线编辑、展示、分享、交流你的 JavaScript 代码_files/plugin_color_picker.png" width="300" height="150" alt="自由扩展、自我增强、打造属于自己的编辑器">
+        </dd></dl>
+        </a>
+      </div>
+      <div class="content_main clearfix">
+		
+        <div class="userOperate">
+          <ul>
+																	<li>
+			<span class="userOperate_time">1小时前</span>
+			<a class="dy_user"><img src="./RunJS - 在线编辑、展示、分享、交流你的 JavaScript 代码_files/size=100" width="24" height="24" alt="qq用户">qq用户</a>
+			Fork了代码  (<a href="http://runjs.cn/detail/fldvteke" target="_blank">表格控件mmGrid</a>),<a href="http://runjs.cn/detail/g6htrt17" target="_blank">查看详情</a>
+		</li>
+																					<li>
+			<span class="userOperate_time">1小时前</span>
+			<a class="dy_user"><img src="./RunJS - 在线编辑、展示、分享、交流你的 JavaScript 代码_files/size=100" width="24" height="24" alt="大老树">大老树</a>
+			发布了代码 (<a href="http://runjs.cn/detail/nol07jkh" target="_blank">adsense</a>)
+		</li>
+																					<li>
+			<span class="userOperate_time">1小时前</span>
+			<a class="dy_user"><img src="./RunJS - 在线编辑、展示、分享、交流你的 JavaScript 代码_files/size=100" width="24" height="24" alt="qq用户">qq用户</a>
+			Fork了代码  (<a href="http://runjs.cn/detail/0scxllcn" target="_blank">CSS3 渐变实现斜线背景</a>),<a href="http://runjs.cn/detail/noeysauf" target="_blank">查看详情</a>
+		</li>
+																																						<li>
+			<span class="userOperate_time">4小时前</span>
+			<a class="dy_user"><img src="./RunJS - 在线编辑、展示、分享、交流你的 JavaScript 代码_files/size=100" width="24" height="24" alt="qq用户">qq用户</a>
+			顶了代码 (<a href="http://runjs.cn/detail/tktdcviq" target="_blank">th123zzz</a>)
+		</li>
+																					<li>
+			<span class="userOperate_time">4小时前</span>
+			<a class="dy_user"><img src="./RunJS - 在线编辑、展示、分享、交流你的 JavaScript 代码_files/size=100" width="24" height="24" alt="qq用户">qq用户</a>
+			Fork了代码  (<a href="http://runjs.cn/detail/dxohs8eq" target="_blank">CSS3发光字</a>),<a href="http://runjs.cn/detail/yhiczygk" target="_blank">查看详情</a>
+		</li>
+																					<li>
+			<span class="userOperate_time">4小时前</span>
+			<a class="dy_user"><img src="./RunJS - 在线编辑、展示、分享、交流你的 JavaScript 代码_files/size=100" width="24" height="24" alt="我喜欢喝奶茶">我喜欢喝奶茶</a>
+			发布了代码 (<a href="http://runjs.cn/detail/wbnuyq6p" target="_blank">CSS背景花纹</a>)
+		</li>
+																					<li>
+			<span class="userOperate_time">4小时前</span>
+			<a class="dy_user"><img src="./RunJS - 在线编辑、展示、分享、交流你的 JavaScript 代码_files/size=100" width="24" height="24" alt="qq用户">qq用户</a>
+			Fork了代码  (<a href="http://runjs.cn/detail/hbywzmjf" target="_blank">html5唯美表白</a>),<a href="http://runjs.cn/detail/tktdcviq" target="_blank">查看详情</a>
+		</li>
+																					<li>
+			<span class="userOperate_time">5小时前</span>
+			<a class="dy_user"><img src="./RunJS - 在线编辑、展示、分享、交流你的 JavaScript 代码_files/f00ac650d1afc273e244d14ebb51d6ebsize=100" width="24" height="24" alt="wjhui">wjhui</a>
+			Fork了代码  (<a href="http://runjs.cn/detail/gkarvkda" target="_blank">Materila Design水波纹</a>),<a href="http://runjs.cn/detail/uy0yh2im" target="_blank">查看详情</a>
+		</li>
+																					<li>
+			<span class="userOperate_time">6小时前</span>
+			<a class="dy_user"><img src="./RunJS - 在线编辑、展示、分享、交流你的 JavaScript 代码_files/68919_100.jpg" width="24" height="24" alt="罗彬">罗彬</a>
+			发布了代码 (<a href="http://runjs.cn/detail/nu9gvyvo" target="_blank">123456</a>)
+		</li>
+																					<li>
+			<span class="userOperate_time">6小时前</span>
+			<a class="dy_user"><img src="./RunJS - 在线编辑、展示、分享、交流你的 JavaScript 代码_files/89038_100.jpg" width="24" height="24" alt="eclipse001">eclipse001</a>
+			Fork了代码  (<a href="http://runjs.cn/detail/hl5pc4ez" target="_blank">js 翻页时钟</a>),<a href="http://runjs.cn/detail/vpll6qs8" target="_blank">查看详情</a>
+		</li>
+																					<li>
+			<span class="userOperate_time">昨天(22:49)</span>
+			<a class="dy_user"><img src="./RunJS - 在线编辑、展示、分享、交流你的 JavaScript 代码_files/75250_100.jpg" width="24" height="24" alt="null">null</a>
+			发布了代码 (<a href="http://runjs.cn/detail/qches1w7" target="_blank">transition-api</a>)
+		</li>
+																					<li>
+			<span class="userOperate_time">昨天(21:36)</span>
+			<a class="dy_user"><img src="./RunJS - 在线编辑、展示、分享、交流你的 JavaScript 代码_files/50201_100.jpg" width="24" height="24" alt="Arliang">Arliang</a>
+			发布了代码 (<a href="http://runjs.cn/detail/tfcgdnlz" target="_blank">bootstrap-add-btn</a>)
+		</li>
+																					<li>
+			<span class="userOperate_time">昨天(21:01)</span>
+			<a class="dy_user"><img src="./RunJS - 在线编辑、展示、分享、交流你的 JavaScript 代码_files/90946_100.jpg" width="24" height="24" alt="judy">judy</a>
+			Fork了代码  (<a href="http://runjs.cn/detail/hl5pc4ez" target="_blank">js 翻页时钟</a>),<a href="http://runjs.cn/detail/nqmu8zhu" target="_blank">查看详情</a>
+		</li>
+																					<li>
+			<span class="userOperate_time">昨天(20:14)</span>
+			<a class="dy_user"><img src="./RunJS - 在线编辑、展示、分享、交流你的 JavaScript 代码_files/size=100" width="24" height="24" alt="qq用户">qq用户</a>
+			Fork了代码  (<a href="http://runjs.cn/detail/fx1vvsld" target="_blank">粒子</a>),<a href="http://runjs.cn/detail/tbn9waio" target="_blank">查看详情</a>
+		</li>
+							          </ul>
+		  <a href="javascript:more_dy();" id="get_more" style="float:right;margin-top:10px;">点击加载更多...</a>
+        </div>
+		<div class="help">
+          <h3>常见问题帮助</h3>
+          <ul>
+            <li><a href="http://runjs.cn/help/runjs" target="_blank">RunJS 是什么？</a></li>
+            <li><a href="http://runjs.cn/help/create" target="_blank">如何在 RunJS 上创建代码？</a></li>
+            <li><a href="http://runjs.cn/help/save" target="_blank">如何保存我的代码？ </a></li>
+            <li><a href="http://runjs.cn/help/fork" target="_blank">Fork 是什么?如何 Fork 别人的代码？</a></li>
+            <li><a href="http://runjs.cn/help/post" target="_blank">如何分享我的代码？</a></li>
+            <li><a href="http://runjs.cn/help/upload" target="_blank">如何上传图片、js、css 等资源文件?</a></li>
+            <li><a href="http://runjs.cn/help/jslib" target="_blank">如何使用一些第三方js库？</a></li>
+			<li><a href="http://runjs.cn/help/ajax" target="_blank">如何在代码中做 Ajax 调用的演示？</a></li>
+		 	<li><a href="http://runjs.cn/help/ie" target="_blank">如何在低版本的 IE 中查看代码效果？</a></li>
+			<li><a href="http://runjs.cn/help/gist" target="_blank">如何在外站嵌入RunJS的代码？</a></li>
+			<li><a href="http://runjs.cn/help/less" target="_blank">如何使用 CoffeeScript 和 Less 来写代码？</a></li>
+            <li><a href="http://runjs.cn/help/plugin" target="_blank">当用户插件使编辑器无法正常使用怎么办？</a></li>
+		  	<li><a href="http://runjs.cn/help/bug" target="_blank">发现了 RunJS 的 bug 或者有建议？</a></li>
+		  </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      <p>© <a href="http://www.oschina.net/">开源中国</a> | <a href="http://runjs.cn/help"> RunJS 帮助</a> | <a href="http://www.51idc.com/" target="_blank">51IDC</a><span style="color:#AAA;">提供服务器和带宽</span> | <a href="http://www.miitbeian.gov.cn/" target="_blank">粤ICP备12009483号-7</a> | <span style="color:#AAA;">深圳市奥思网络科技有限公司版权所有</span></p>
+    </div>
+	
+
+
+<!-- Generated by RunJS (Fri Mar 16 15:46:34 CST 2018) 1ms --></body></html>
